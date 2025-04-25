@@ -9,7 +9,7 @@ import (
 
 // MessagePackMarshaller marshal or unmarshal value in message pack format.
 type MessagePackMarshaller struct {
-	ValueType reflect.Type
+	Type reflect.Type
 }
 
 // Marshal marshals value type to message pack.
@@ -21,10 +21,10 @@ func (m MessagePackMarshaller) Marshal(value interface{}) ([]byte, error) {
 func (m MessagePackMarshaller) Unmarshal(bytes []byte) (interface{}, error) {
 	var value reflect.Value
 
-	if m.ValueType.Kind() != reflect.Ptr {
-		value = reflect.New(m.ValueType)
+	if m.Type.Kind() != reflect.Ptr {
+		value = reflect.New(m.Type)
 	} else {
-		value = reflect.New(m.ValueType.Elem())
+		value = reflect.New(m.Type.Elem())
 	}
 
 	if err := msgpack.Unmarshal(bytes, value.Interface()); err != nil {
@@ -32,7 +32,7 @@ func (m MessagePackMarshaller) Unmarshal(bytes []byte) (interface{}, error) {
 		return nil, err
 	}
 
-	if m.ValueType.Kind() != reflect.Ptr {
+	if m.Type.Kind() != reflect.Ptr {
 		value = reflect.Indirect(value)
 	}
 

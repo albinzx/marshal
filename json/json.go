@@ -8,22 +8,22 @@ import (
 
 // JSONMarshaller marshal or unmarshal value in json format.
 type JSONMarshaller struct {
-	ValueType reflect.Type
+	Type reflect.Type
 }
 
 // Marshal marshals value type to json.
-func (jm JSONMarshaller) Marshal(value interface{}) ([]byte, error) {
+func (m JSONMarshaller) Marshal(value interface{}) ([]byte, error) {
 	return json.Marshal(value)
 }
 
 // Unmarshal unmarshals json to value type.
-func (jm JSONMarshaller) Unmarshal(bytes []byte) (interface{}, error) {
+func (m JSONMarshaller) Unmarshal(bytes []byte) (interface{}, error) {
 	var value reflect.Value
 
-	if jm.ValueType.Kind() != reflect.Ptr {
-		value = reflect.New(jm.ValueType)
+	if m.Type.Kind() != reflect.Ptr {
+		value = reflect.New(m.Type)
 	} else {
-		value = reflect.New(jm.ValueType.Elem())
+		value = reflect.New(m.Type.Elem())
 	}
 
 	if err := json.Unmarshal(bytes, value.Interface()); err != nil {
@@ -31,7 +31,7 @@ func (jm JSONMarshaller) Unmarshal(bytes []byte) (interface{}, error) {
 		return nil, err
 	}
 
-	if jm.ValueType.Kind() != reflect.Ptr {
+	if m.Type.Kind() != reflect.Ptr {
 		value = reflect.Indirect(value)
 	}
 

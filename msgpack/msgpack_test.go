@@ -9,18 +9,18 @@ import (
 
 func TestMessagePackMarshaller_Marshal(t *testing.T) {
 	type fields struct {
-		ValueType reflect.Type
+		Type reflect.Type
 	}
 	type args struct {
 		value interface{}
 	}
 	type Data struct {
-		Num  int
-		Name string
+		Number int
+		Name   string
 	}
 	data := Data{
-		Num:  1,
-		Name: "one",
+		Number: 1,
+		Name:   "one",
 	}
 	bytes, _ := msgpack.Marshal(data)
 	tests := []struct {
@@ -30,8 +30,8 @@ func TestMessagePackMarshaller_Marshal(t *testing.T) {
 		want    []byte
 		wantErr bool
 	}{
-		{name: "marshal",
-			fields:  fields{ValueType: reflect.TypeOf(Data{})},
+		{name: "marshal to msgpack",
+			fields:  fields{Type: reflect.TypeOf(Data{})},
 			args:    args{value: data},
 			want:    bytes,
 			wantErr: false},
@@ -39,7 +39,7 @@ func TestMessagePackMarshaller_Marshal(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			m := MessagePackMarshaller{
-				ValueType: tt.fields.ValueType,
+				Type: tt.fields.Type,
 			}
 			got, err := m.Marshal(tt.args.value)
 			if (err != nil) != tt.wantErr {
@@ -55,18 +55,18 @@ func TestMessagePackMarshaller_Marshal(t *testing.T) {
 
 func TestMessagePackMarshaller_Unmarshal(t *testing.T) {
 	type fields struct {
-		ValueType reflect.Type
+		Type reflect.Type
 	}
 	type args struct {
 		bytes []byte
 	}
 	type Data struct {
-		Num  int
-		Name string
+		Number int
+		Name   string
 	}
 	data := Data{
-		Num:  1,
-		Name: "one",
+		Number: 1,
+		Name:   "one",
 	}
 	bytes, _ := msgpack.Marshal(data)
 	tests := []struct {
@@ -77,22 +77,22 @@ func TestMessagePackMarshaller_Unmarshal(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:    "unmarshal",
-			fields:  fields{ValueType: reflect.TypeOf(Data{})},
+			name:    "unmarshal struct type",
+			fields:  fields{Type: reflect.TypeOf(Data{})},
 			args:    args{bytes: bytes},
 			want:    data,
 			wantErr: false,
 		},
 		{
-			name:    "unmarshal-pointer",
-			fields:  fields{ValueType: reflect.TypeOf(&Data{})},
+			name:    "unmarshal pointer type",
+			fields:  fields{Type: reflect.TypeOf(&Data{})},
 			args:    args{bytes: bytes},
 			want:    &data,
 			wantErr: false,
 		},
 		{
-			name:    "unmarshal-invalid",
-			fields:  fields{ValueType: reflect.TypeOf(Data{})},
+			name:    "unmarshal invalid type",
+			fields:  fields{Type: reflect.TypeOf(Data{})},
 			args:    args{bytes: []byte{}},
 			want:    nil,
 			wantErr: true,
@@ -101,7 +101,7 @@ func TestMessagePackMarshaller_Unmarshal(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			m := MessagePackMarshaller{
-				ValueType: tt.fields.ValueType,
+				Type: tt.fields.Type,
 			}
 			got, err := m.Unmarshal(tt.args.bytes)
 			if (err != nil) != tt.wantErr {
