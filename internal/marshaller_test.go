@@ -24,6 +24,20 @@ func TestTypeMarshaller_Marshal(t *testing.T) {
 		wantErr bool
 	}{
 		{
+			name: "marshal nil",
+			fields: fields{
+				valueType: reflect.TypeOf(""),
+				marshal: func(v any) ([]byte, error) {
+					return json.Marshal(v)
+				},
+			},
+			args: args{
+				value: nil,
+			},
+			want:    nil,
+			wantErr: false,
+		},
+		{
 			name: "successful marshal",
 			fields: fields{
 				valueType: reflect.TypeOf(""),
@@ -102,6 +116,20 @@ func TestTypeMarshaller_Unmarshal(t *testing.T) {
 		want    any
 		wantErr bool
 	}{
+		{
+			name: "unmarshal nil",
+			fields: fields{
+				valueType: reflect.TypeOf(""),
+				unmarshal: func(data []byte, v any) error {
+					return json.Unmarshal(data, v)
+				},
+			},
+			args: args{
+				bytes: nil,
+			},
+			want:    nil,
+			wantErr: false,
+		},
 		{
 			name: "successful unmarshal",
 			fields: fields{

@@ -21,11 +21,19 @@ type TypeMarshaller struct {
 
 // Marshal marshals value to byte array.
 func (m *TypeMarshaller) Marshal(value any) ([]byte, error) {
+	if value == nil {
+		return nil, nil
+	}
+
 	return m.marshal(value)
 }
 
 // Unmarshal unmarshals byte array to value.
 func (m *TypeMarshaller) Unmarshal(bytes []byte) (any, error) {
+	if bytes == nil {
+		return nil, nil
+	}
+
 	var value reflect.Value
 
 	isNotPtr := m.valueType.Kind() != reflect.Ptr
