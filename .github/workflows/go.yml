@@ -27,6 +27,7 @@ jobs:
     - name: Sonar scan
       uses: sonarsource/sonarqube-scan-action@v5 # see the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
       with:
+        projectBaseDir: ./
         args: >
           -Dsonar.projectKey=marshaler
           -Dsonar.organization=albinzx
