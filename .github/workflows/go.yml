@@ -11,7 +11,8 @@ on:
 
 jobs:
 
-  build:
+  code-review:
+    name: Code Review
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -29,7 +30,7 @@ jobs:
       with:
         projectBaseDir: ./
         args: >
-          -Dsonar.projectKey=marshaler
+          -Dsonar.projectKey=marshal
           -Dsonar.organization=albinzx
           -Dsonar.sources=.
           -Dsonar.exclusions=**/*_test.go
