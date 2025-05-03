@@ -20,6 +20,7 @@ type TypeMarshaller struct {
 }
 
 // Marshal marshals value to byte array.
+// It returns nil if the value is nil.
 func (m *TypeMarshaller) Marshal(value any) ([]byte, error) {
 	if value == nil {
 		return nil, nil
@@ -29,6 +30,7 @@ func (m *TypeMarshaller) Marshal(value any) ([]byte, error) {
 }
 
 // Unmarshal unmarshals byte array to value.
+// It returns nil if the byte array is nil.
 func (m *TypeMarshaller) Unmarshal(bytes []byte) (any, error) {
 	if bytes == nil {
 		return nil, nil
